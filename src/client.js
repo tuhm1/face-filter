@@ -130,7 +130,7 @@ async function loadFaceDetectionModel() {
         if (webgl2) {
             await tf.setBackend('webgl');
         } else {
-            setWasmPaths('/tfjs-backend-wasm/');
+            setWasmPaths('tfjs-backend-wasm/');
             await tf.setBackend('wasm');
         }
         pFaceDetectionModel = FaceDetection.load(FaceDetection.SupportedPackages.mediapipeFacemesh);
