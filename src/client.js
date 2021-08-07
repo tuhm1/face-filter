@@ -1,5 +1,7 @@
-import * as Face from '@tensorflow-models/face-landmarks-detection';
+import * as FaceDetection from '@tensorflow-models/face-landmarks-detection';
+import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
+import { setWasmPaths } from '@tensorflow/tfjs-backend-wasm';
 import {
     Box3,
     Matrix4,
@@ -121,17 +123,24 @@ function getVideoStream() {
         });
 }
 
-let pModel;
-function loadFaceModel() {
-    if (!pModel) {
-        pModel = Face.load(Face.SupportedPackages.mediapipeFacemesh);
+let pFaceDetectionModel;
+async function loadFaceDetectionModel() {
+    if (!pFaceDetectionModel) {
+        const webgl2 = document.createElement('canvas').getContext('webgl2');
+        if (webgl2) {
+            await tf.setBackend('webgl');
+        } else {
+            setWasmPaths('/tfjs-backend-wasm/');
+            await tf.setBackend('wasm');
+        }
+        pFaceDetectionModel = FaceDetection.load(FaceDetection.SupportedPackages.mediapipeFacemesh);
     }
-    return pModel;
+    return pFaceDetectionModel;
 }
 
 async function loadThugLifeFilter() {
-    const pModel = loadFaceModel();
-    const pGltf = new GLTFLoader().loadAsync('/thug_life_glasses/scene.gltf');
+    const pModel = loadFaceDetectionModel();
+    const pGltf = new GLTFLoader().loadAsync('/3d-objects/thug_life_glasses/scene.gltf');
     const [model, gltf] = await Promise.all([pModel, pGltf]);
     return function initFilter(renderer, settings) {
         const scene = new Scene();
@@ -188,8 +197,8 @@ async function loadThugLifeFilter() {
 }
 
 async function loadHeartFilter() {
-    const pModel = loadFaceModel();
-    const pGltf = new GLTFLoader().loadAsync('/heart_glasses/scene.gltf');
+    const pModel = loadFaceDetectionModel();
+    const pGltf = new GLTFLoader().loadAsync('/3d-objects/heart_glasses/scene.gltf');
     const [model, gltf] = await Promise.all([pModel, pGltf]);
     return function initFilter(renderer, settings) {
         const scene = new Scene();
@@ -247,8 +256,8 @@ async function loadHeartFilter() {
 }
 
 async function loadGuyFawkesFilter() {
-    const pModel = loadFaceModel();
-    const pGltf = new GLTFLoader().loadAsync('/guy_fawkes/scene.gltf');
+    const pModel = loadFaceDetectionModel();
+    const pGltf = new GLTFLoader().loadAsync('/3d-objects/guy_fawkes/scene.gltf');
     const [model, gltf] = await Promise.all([pModel, pGltf]);
     return function initFilter(renderer, settings) {
         const scene = new Scene();
@@ -304,8 +313,8 @@ async function loadGuyFawkesFilter() {
 }
 
 async function loadBloodyEyesFilter() {
-    const pModel = loadFaceModel();
-    const pGltf = new GLTFLoader().loadAsync('/bloody_eyes_mask/scene.gltf');
+    const pModel = loadFaceDetectionModel();
+    const pGltf = new GLTFLoader().loadAsync('/3d-objects/bloody_eyes_mask/scene.gltf');
     const [model, gltf] = await Promise.all([pModel, pGltf]);
     return function initFilter(renderer, settings) {
         const scene = new Scene();
