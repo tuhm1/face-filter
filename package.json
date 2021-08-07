@@ -5,9 +5,27 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd server && npm i && node src/index.js"
+    "start": "node src/server.js",
+    "build": "webpack --mode=production"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "14.x"
+  },
+  "dependencies": {
+    "@tensorflow-models/face-landmarks-detection": "0.0.3",
+    "@tensorflow-models/facemesh": "0.0.5",
+    "@tensorflow/tfjs-backend-webgl": "^3.8.0",
+    "@tensorflow/tfjs-converter": "^3.8.0",
+    "@tensorflow/tfjs-core": "^3.8.0",
+    "express": "^4.17.1",
+    "three": "^0.131.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.49.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  }
 }
