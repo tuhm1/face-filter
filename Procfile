@@ -1,1 +1,0 @@
-web: cd client && npx webpack --mode=production && cd ../server && node src/index.js
